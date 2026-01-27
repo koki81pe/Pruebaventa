@@ -1,0 +1,200 @@
+<!-- MOD-001: ENCABEZADO [INICIO] -->
+<!--
+*****************************************
+PROYECTO: Prueba Ventas
+ARCHIVO: index.html
+VERSIÓN: 01.03
+FECHA: 27/01/2026 09:48 (UTC-5)
+*****************************************
+-->
+<!-- MOD-001: FIN -->
+
+<!-- MOD-002: APERTURA HTML [INICIO] -->
+<!DOCTYPE html>
+<html>
+<head>
+  <base target="_top">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+<!-- MOD-002: FIN -->
+
+<!-- MOD-003: ESTILOS CSS [INICIO] -->
+<style>
+/* Variables globales de colores */
+:root {
+  --primary: #4285f4;
+  --danger: #ea4335;
+  --gray: #f1f3f4;
+}
+
+/* Estilos del contenedor principal */
+body { 
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
+  text-align: center; 
+  padding: 20px; 
+  color: #3c4043;
+}
+.container { max-width: 300px; margin: auto; }
+
+/* Estilos del botón de micrófono */
+#btnMic { 
+  width: 80px; 
+  height: 80px; 
+  border-radius: 50%; 
+  border: none;
+  background-color: var(--primary);
+  color: white;
+  font-size: 30px;
+  cursor: pointer;
+  box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+  transition: all 0.3s ease;
+  margin-bottom: 20px;
+  outline: none;
+}
+
+/* Estado de escucha activa */
+#btnMic.escuchando {
+  background-color: var(--danger);
+  animation: pulse 1.5s infinite;
+}
+
+/* Animación de pulso para el botón activo */
+@keyframes pulse {
+  0% { transform: scale(1); box-shadow: 0 0 0 0 rgba(234, 67, 53, 0.7); }
+  70% { transform: scale(1.1); box-shadow: 0 0 0 15px rgba(234, 67, 53, 0); }
+  100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(234, 67, 53, 0); }
+}
+
+/* Animación de rotación para el loader */
+@keyframes spin { 
+  0% { transform: rotate(0deg); } 
+  100% { transform: rotate(360deg); } 
+}
+
+/* Área de estado y mensajes */
+#status { 
+  font-size: 14px; 
+  margin-top: 15px; 
+  min-height: 40px;
+  line-height: 1.4;
+}
+
+/* Indicador de carga (loader) */
+.loader {
+  border: 4px solid var(--gray);
+  border-top: 4px solid var(--primary);
+  border-radius: 50%;
+  width: 20px;
+  height: 20px;
+  animation: spin 1s linear infinite;
+  display: inline-block;
+  vertical-align: middle;
+  margin-right: 8px;
+  display: none;
+}
+</style>
+</head>
+<body>
+<div class="container">
+<!-- MOD-003: FIN -->
+
+<!-- MOD-004: CONTENIDO HTML [INICIO] -->
+<h3>Ventas Voz</h3>
+<button id="btnMic">🎤</button>
+<div id="status">Toca el micrófono para dictar la venta</div>
+<div id="loader" class="loader"></div>
+<!-- MOD-004: FIN -->
+
+<!-- MOD-005: JAVASCRIPT [INICIO] -->
+<script>
+// Referencias a elementos del DOM
+const btn = document.getElementById('btnMic');
+const status = document.getElementById('status');
+const loader = document.getElementById('loader');
+
+// Configurar API de Reconocimiento de Voz
+const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+
+// Validar soporte del navegador
+if (!SpeechRecognition) {
+  status.innerHTML = "❌ Tu navegador no soporta reconocimiento de voz. Usa Chrome.";
+  btn.style.display = "none";
+} else {
+  // Inicializar reconocimiento de voz
+  const recognition = new SpeechRecognition();
+  recognition.lang = 'es-PE';
+  recognition.interimResults = false;
+
+  // Evento click del botón micrófono
+  btn.onclick = () => {
+    try {
+      recognition.start();
+    } catch (e) {
+      console.log("Ya estaba encendido");
+    }
+  };
+
+  // Evento al iniciar escucha
+  recognition.onstart = () => {
+    btn.classList.add('escuchando');
+    status.innerText = "Te escucho... (Ej: Un jabón a 5 soles)";
+  };
+
+  // Evento de error
+  recognition.onerror = (event) => {
+    btn.classList.remove('escuchando');
+    status.innerText = "Error: " + event.error;
+  };
+
+  // Evento al obtener resultado
+  recognition.onresult = (event) => {
+    btn.classList.remove('escuchando');
+    const transcripcion = event.results[0][0].transcript;
+    enviarAGemini(transcripcion);
+  };
+}
+
+// Función para enviar transcripción al servidor Google Apps Script
+function enviarAGemini(texto) {
+  status.innerText = "Analizando: \"" + texto + "\"";
+  loader.style.display = "inline-block";
+  btn.disabled = true;
+
+  // Llamada a la función modulada en code.gs
+  google.script.run
+    .withSuccessHandler((respuesta) => {
+      status.innerHTML = respuesta;
+      loader.style.display = "none";
+      btn.disabled = false;
+      // Feedback visual de éxito
+      setTimeout(() => { status.innerText = "Toca el micrófono para otra venta"; }, 5000);
+    })
+    .withFailureHandler((error) => {
+      status.innerHTML = "❌ Error: " + error.message;
+      loader.style.display = "none";
+      btn.disabled = false;
+    })
+    .ejecutorPrincipal(texto);
+}
+</script>
+<!-- MOD-005: FIN -->
+
+<!-- MOD-006: CÓDIGO DE CIERRE [INICIO] -->
+</div>
+</body>
+</html>
+<!-- MOD-006: FIN -->
+
+<!-- MOD-007: NOTAS [INICIO] -->
+<!--
+DESCRIPCIÓN:
+Interfaz de reconocimiento de voz para registro de ventas.
+
+DEPENDENCIAS:
+- Web Speech API (Chrome/Edge)
+- Google Apps Script: función ejecutorPrincipal() en code.gs
+
+ADVERTENCIAS:
+- Solo funciona en navegadores con soporte Web Speech API
+- Requiere permisos de micrófono
+-->
+<!-- MOD-007: FIN -->
