@@ -15,7 +15,7 @@ FECHA: 27/01/2026 09:40 (UTC-5)
  * Contiene API Key, nombre de hoja y URL del modelo Gemini
  */
 const CONFIG = {
-  API_KEY: 'AIzaSyDVejACx27_tL3j3vX65LXojKsRrfbdZ1U', 
+  API_KEY: 'COLOCARCLAVE', 
   SHEET_NAME: 'Ventas',
   MODEL_URL: 'https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent'
 };
