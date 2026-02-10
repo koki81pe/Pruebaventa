@@ -15,7 +15,7 @@ FECHA: 29/01/2026 23:44 (UTC-5)
  * Contiene API Key, nombres de hojas y URL del modelo Gemini
  */
 const CONFIG = {
-  API_KEY: 'AIzaSyAqs2cSnSym-wTCsJ_dKoqijE9qPa6k-NA', 
+  API_KEY: 'APIKEY', 
   SHEET_NAME: 'Ventas',
   MPAGO_SHEET: 'Mpago',
   CAT_SHEET: 'Cat',
