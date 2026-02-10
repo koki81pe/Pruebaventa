@@ -3,8 +3,8 @@
 *****************************************
 PROYECTO: Prueba Ventas
 ARCHIVO: index.html
-VERSIÓN: 01.03
-FECHA: 27/01/2026 09:48 (UTC-5)
+VERSIÓN: 01.29
+FECHA: 31/01/2026 08:45 (UTC-5)
 *****************************************
 -->
 <!-- MOD-001: FIN -->
@@ -19,23 +19,38 @@ FECHA: 27/01/2026 09:48 (UTC-5)
 
 <!-- MOD-003: ESTILOS CSS [INICIO] -->
 <style>
-/* Variables globales de colores */
+/* MOD-003-S01: Variables globales [INICIO] */
 :root {
   --primary: #4285f4;
   --danger: #ea4335;
   --gray: #f1f3f4;
+  --success: #34a853;
 }
+/* MOD-003-S01: FIN */
 
-/* Estilos del contenedor principal */
+/* MOD-003-S02: Estilos base (body y contenedor) [INICIO] */
 body { 
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
   text-align: center; 
   padding: 20px; 
   color: #3c4043;
+  background-color: #f0f2f5; /* Fondo gris neutro moderno */
 }
-.container { max-width: 300px; margin: auto; }
 
-/* Estilos del botón de micrófono */
+.container { 
+  max-width: 400px; 
+  margin: auto;
+  background-color: white;
+  padding: 25px;
+  
+  /* REMATE SUTIL */
+  border-radius: 16px; /* Bordes más curvos y elegantes */
+  border: 1px solid rgba(0,0,0,0.05); /* Borde casi imperceptible */
+  box-shadow: 0 10px 25px rgba(0,0,0,0.1); /* Sombra suave que da elevación */
+}
+/* MOD-003-S02: FIN */
+
+/* MOD-003-S03: Botón de micrófono [INICIO] */
 #btnMic { 
   width: 80px; 
   height: 80px; 
@@ -51,66 +66,148 @@ body {
   outline: none;
 }
 
-/* Estado de escucha activa */
 #btnMic.escuchando {
   background-color: var(--danger);
   animation: pulse 1.5s infinite;
 }
+/* MOD-003-S03: FIN */
 
-/* Animación de pulso para el botón activo */
+/* MOD-003-S04: Animaciones [INICIO] */
 @keyframes pulse {
   0% { transform: scale(1); box-shadow: 0 0 0 0 rgba(234, 67, 53, 0.7); }
   70% { transform: scale(1.1); box-shadow: 0 0 0 15px rgba(234, 67, 53, 0); }
   100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(234, 67, 53, 0); }
 }
 
-/* Animación de rotación para el loader */
 @keyframes spin { 
   0% { transform: rotate(0deg); } 
   100% { transform: rotate(360deg); } 
 }
+/* MOD-003-S04: FIN */
 
-/* Área de estado y mensajes */
-#status { 
-  font-size: 14px; 
-  margin-top: 15px; 
-  min-height: 40px;
-  line-height: 1.4;
+/* MOD-003-S05: CONTROLES DE AUDIO (NUEVO) [INICIO] */
+.audio-controls {
+  margin-top: 15px;
+  padding-top: 10px;
+  border-top: 1px solid #dadce0;
+  display: flex;
+  justify-content: center;
+  gap: 20px;
 }
 
-/* Indicador de carga (loader) */
-.loader {
-  border: 4px solid var(--gray);
-  border-top: 4px solid var(--primary);
+.btn-audio {
+  background: white;
+  border: 1px solid #dadce0;
   border-radius: 50%;
-  width: 20px;
-  height: 20px;
-  animation: spin 1s linear infinite;
-  display: inline-block;
-  vertical-align: middle;
-  margin-right: 8px;
+  width: 44px;
+  height: 44px;
+  cursor: pointer;
+  font-size: 20px;
+  color: #5f6368;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  outline: none;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+}
+
+.btn-audio:hover {
+  background-color: #f8f9fa;
+  color: var(--primary);
+  border-color: var(--primary);
+}
+
+.btn-audio:active {
+  transform: scale(0.92);
+  background-color: #e8f0fe;
+}
+/* MOD-003-S05: FIN */
+
+/* MOD-003-S06: Resumen de ventas [INICIO] */
+#ventasResumen {
+  margin-top: 25px;
+  padding: 15px;
+  background-color: var(--gray);
+  border-radius: 8px;
+  text-align: left;
   display: none;
 }
+
+#ventasResumen.show {
+  display: block;
+}
+
+.venta-titulo {
+  font-size: 16px;
+  font-weight: bold;
+  color: var(--success);
+  margin-bottom: 10px;
+  text-align: center;
+}
+
+.venta-separador {
+  border-top: 2px solid #dadce0;
+  margin: 10px 0;
+}
+
+.venta-item {
+  font-size: 14px;
+  padding: 8px 0;
+  color: #5f6368;
+  line-height: 1.6;
+}
+
+.venta-total {
+  font-weight: bold;
+  color: #202124;
+  margin-top: 10px;
+  padding-top: 10px;
+  border-top: 2px solid #dadce0;
+  text-align: right;
+  font-size: 15px;
+}
+/* MOD-003-S06: FIN */
 </style>
+<!-- MOD-003: FIN -->
+
+<!-- MOD-004: /HEAD + BODY + DIV CLASS [INICIO] -->
 </head>
 <body>
 <div class="container">
-<!-- MOD-003: FIN -->
+<!-- MOD-004: FIN -->
 
-<!-- MOD-004: CONTENIDO HTML [INICIO] -->
+<!-- MOD-005: CONTENIDO HTML [INICIO] -->
 <h3>Ventas Voz</h3>
 <button id="btnMic">🎤</button>
 <div id="status">Toca el micrófono para dictar la venta</div>
 <div id="loader" class="loader"></div>
-<!-- MOD-004: FIN -->
 
-<!-- MOD-005: JAVASCRIPT [INICIO] -->
+<!-- V01.19: Contenedor para mostrar ventas registradas -->
+<div id="ventasResumen"></div>
+<!-- MOD-005: FIN -->
+
+<!-- MOD-006: JAVASCRIPT [INICIO] -->
 <script>
+// MOD-006-S01: INICIADOR DE DEBUG [INICIO]
+// Declaración inicial del objeto DEBUG para uso en módulos posteriores
+const DEBUG = {};
+const DEBUG_TIMESTAMPS = {};
+// MOD-006-S01: FIN
+
+// MOD-006-S02: VARIABLES Y REFERENCIAS DOM (MODIFICADO) [INICIO]
 // Referencias a elementos del DOM
 const btn = document.getElementById('btnMic');
 const status = document.getElementById('status');
 const loader = document.getElementById('loader');
+const ventasResumen = document.getElementById('ventasResumen');
 
+// Variables de estado global de audio (Persistencia Local)
+let narracionActiva = localStorage.getItem('muteVoz') !== 'false'; 
+let ultimoMensajeVoz = ""; // Buffer para el botón ▶
+// MOD-006-S02: FIN
+
+// MOD-006-S03: CONFIGURACIÓN SPEECH RECOGNITION [INICIO]
 // Configurar API de Reconocimiento de Voz
 const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
 
@@ -123,68 +220,438 @@ if (!SpeechRecognition) {
   const recognition = new SpeechRecognition();
   recognition.lang = 'es-PE';
   recognition.interimResults = false;
+// MOD-006-S03: FIN
 
+// MOD-006-S04: EVENTOS DEL MICRÓFONO [INICIO]
   // Evento click del botón micrófono
   btn.onclick = () => {
+    DEBUG.separador('USUARIO PRESIONA BOTÓN MICRÓFONO');
+    DEBUG.log('interfaz', 'Click en botón micrófono detectado');
+    DEBUG_TIMESTAMPS.inicio = performance.now();
+    
     try {
       recognition.start();
+      DEBUG.log('interfaz', 'Llamando a recognition.start()');
     } catch (e) {
+      DEBUG.log('advertencia', 'Recognition ya estaba activo', {error: e.message});
       console.log("Ya estaba encendido");
     }
   };
 
   // Evento al iniciar escucha
   recognition.onstart = () => {
+    DEBUG_TIMESTAMPS.vozInicio = performance.now();
+    const duracion = ((DEBUG_TIMESTAMPS.vozInicio - DEBUG_TIMESTAMPS.inicio) / 1000).toFixed(3);
+    
+    DEBUG.separador('VOZ: ESCUCHA INICIADA');
+    DEBUG.log('exito', `Reconocimiento de voz iniciado correctamente (${duracion}s)`, {
+      idioma: recognition.lang,
+      interimResults: recognition.interimResults
+    });
+    
     btn.classList.add('escuchando');
     status.innerText = "Te escucho... (Ej: Un jabón a 5 soles)";
   };
 
   // Evento de error
   recognition.onerror = (event) => {
+    DEBUG_TIMESTAMPS.vozError = performance.now();
+    const duracion = ((DEBUG_TIMESTAMPS.vozError - DEBUG_TIMESTAMPS.vozInicio) / 1000).toFixed(3);
+    
+    DEBUG.separador('VOZ: ERROR DETECTADO');
+    DEBUG.log('error', `Error en reconocimiento de voz: ${event.error} (${duracion}s desde inicio)`, {
+      error: event.error,
+      message: event.message,
+      timestamp: new Date().toISOString()
+    });
+    
     btn.classList.remove('escuchando');
     status.innerText = "Error: " + event.error;
   };
 
   // Evento al obtener resultado
   recognition.onresult = (event) => {
+    DEBUG_TIMESTAMPS.vozResultado = performance.now();
+    const duracionVoz = ((DEBUG_TIMESTAMPS.vozResultado - DEBUG_TIMESTAMPS.vozInicio) / 1000).toFixed(3);
+    const duracionTotal = ((DEBUG_TIMESTAMPS.vozResultado - DEBUG_TIMESTAMPS.inicio) / 1000).toFixed(3);
+    
     btn.classList.remove('escuchando');
     const transcripcion = event.results[0][0].transcript;
+    const confianza = (event.results[0][0].confidence * 100).toFixed(2);
+    
+    DEBUG.separador('VOZ: TRANSCRIPCIÓN CAPTURADA');
+    DEBUG.log('exito', `Transcripción obtenida (${duracionVoz}s de voz, ${duracionTotal}s total)`, {
+      transcripcion: transcripcion,
+      confianza: `${confianza}%`,
+      isFinal: event.results[0].isFinal,
+      alternativas: event.results[0].length
+    });
+    DEBUG.objeto('Evento completo de resultado', event.results[0]);
+    
     enviarAGemini(transcripcion);
   };
 }
+// MOD-006-S04: FIN
 
-// Función para enviar transcripción al servidor Google Apps Script
+// MOD-006-S05: VISUALIZACIÓN DE VENTAS [INICIO]
+/**
+ * Renderiza el reporte visual e inyecta los controles de audio dinámicos
+ */
+function mostrarVentas(respuesta) {
+  // Mantenemos el separador porque ayuda a identificar el inicio del dibujo en consola
+  DEBUG.separador('HTML: CONSTRUYENDO VISUALIZACIÓN');
+  
+  if (!respuesta.exito || !respuesta.ventas || respuesta.ventas.length === 0) {
+    ventasResumen.classList.remove('show');
+    return;
+  }
+  
+  // 1. Construcción del listado visual
+  let html = `<div class="venta-titulo">✅ ${respuesta.totalVentas} venta${respuesta.totalVentas === 1 ? '' : 's'} registrada${respuesta.totalVentas === 1 ? '' : 's'}</div>`;
+  html += '<div class="venta-separador"></div>';
+  
+  respuesta.ventas.forEach((venta) => {
+    const totalF = typeof venta.total === 'number' ? venta.total.toFixed(2) : "0.00";
+    const precioF = typeof venta.precio === 'number' ? venta.precio.toFixed(2) : "0.00";
+    const modoTexto = venta.modo ? `(${venta.modo})` : '';
+    html += `<div class="venta-item">${venta.producto} - S/ ${precioF} × ${venta.cantidad} = <b>S/ ${totalF}</b> ${modoTexto}</div>`;
+  });
+  
+  if (respuesta.ventas.length > 1) {
+    const totalGen = typeof respuesta.totalGeneral === 'number' ? respuesta.totalGeneral.toFixed(2) : "0.00";
+    html += `<div class="venta-total">Total: S/ ${totalGen}</div>`;
+  }
+  
+  // 2. Inserción de Pack de Botones (Mute + Stop + Play/Replay)
+  const iconoMute = (typeof narracionActiva !== 'undefined' && narracionActiva) ? '🔊' : '🔈';
+  
+  html += `
+  <div class="audio-controls" style="margin-top: 15px; display: flex; justify-content: center; gap: 10px;">
+    <button id="btnMute" class="btn-audio" title="Mute/Unmute" style="cursor:pointer; padding: 5px 10px;">${iconoMute}</button>
+    <button id="btnStop" class="btn-audio" title="Detener" style="cursor:pointer; padding: 5px 10px;">⏹</button>
+    <button id="btnReplay" class="btn-audio" title="Repetir" style="cursor:pointer; padding: 5px 10px;">▶</button>
+  </div>`;
+  
+  ventasResumen.innerHTML = html;
+  ventasResumen.classList.add('show');
+  
+  // Guardamos el mensaje para el botón Repetir (indispensable para S09)
+  if (respuesta.mensajeVoz) {
+    ultimoMensajeVoz = respuesta.mensajeVoz;
+  }
+
+  // 3. Vínculo de eventos (indispensable setTimeout para botones dinámicos)
+  setTimeout(() => {
+    if (typeof inicializarEventosAudio === 'function') {
+      inicializarEventosAudio();
+    } else {
+      // Mantenemos este error porque S07 no puede saber si los botones fallaron al nacer
+      DEBUG.error('interfaz', 'Error crítico: La función de eventos de audio no existe');
+    }
+  }, 150); 
+}
+// MOD-006-S05: FIN
+
+// MOD-006-S06: COMUNICACIÓN CON SERVIDOR [INICIO]
 function enviarAGemini(texto) {
+  DEBUG_TIMESTAMPS.servidorEnvio = performance.now();
   status.innerText = "Analizando: \"" + texto + "\"";
   loader.style.display = "inline-block";
   btn.disabled = true;
 
-  // Llamada a la función modulada en code.gs
   google.script.run
     .withSuccessHandler((respuesta) => {
-      status.innerHTML = respuesta;
+      DEBUG_TIMESTAMPS.servidorRespuesta = performance.now();
+      
+      if (respuesta.exito) {
+        status.innerHTML = `✅ Procesado correctamente`;
+        
+        // --- CONSTRUCCIÓN DE FRASE NATURAL (PRODUCTO + PRECIO + MODO) ---
+        let frases = [];
+        respuesta.ventas.forEach(v => {
+          // Convertir decimales a formato natural (ej: 8.50 -> "8 soles 50")
+          const entero = Math.floor(v.precio);
+          const decimal = Math.round((v.precio - entero) * 100);
+          const precioVoz = decimal > 0 ? `${entero} soles ${decimal}` : `${entero} soles`;
+          const modoVoz = v.modo.toLowerCase() === 'efectivo' ? 'en efectivo' : `con ${v.modo}`;
+          
+          frases.push(`${v.producto}, ${precioVoz} ${modoVoz}`);
+        });
+
+        if (respuesta.ventas.length > 1) {
+          const tEntero = Math.floor(respuesta.totalGeneral);
+          const tDecimal = Math.round((respuesta.totalGeneral - tEntero) * 100);
+          const totalVoz = tDecimal > 0 ? `${tEntero} soles ${tDecimal}` : `${tEntero} soles`;
+          frases.push(`Total, ${totalVoz}`);
+        }
+
+        const fraseFinal = frases.join('. ');
+        decir(fraseFinal); // Disparar Audio
+        mostrarVentas(respuesta); // Mostrar Visual
+        
+      } else {
+        status.innerHTML = respuesta.mensajes.join('<br>');
+        decir("Error al registrar");
+        ventasResumen.classList.remove('show');
+      }
+      
       loader.style.display = "none";
       btn.disabled = false;
-      // Feedback visual de éxito
-      setTimeout(() => { status.innerText = "Toca el micrófono para otra venta"; }, 5000);
+      setTimeout(() => { if(status.innerText.includes('✅')) status.innerText = "Toca el micrófono para otra venta"; }, 5000);
+      
+      DEBUG.log('exito', 'Ciclo de servidor completado');
     })
     .withFailureHandler((error) => {
       status.innerHTML = "❌ Error: " + error.message;
       loader.style.display = "none";
       btn.disabled = false;
+      decir("Fallo en la conexión");
     })
     .ejecutorPrincipal(texto);
 }
-</script>
-<!-- MOD-005: FIN -->
+// MOD-006-S06: FIN
 
-<!-- MOD-006: CÓDIGO DE CIERRE [INICIO] -->
+// MOD-006-S07: SISTEMA DE DEBUG [INICIO]
+/**
+ * Sistema de logging Nivel 3 con timestamps, colores y medición de tiempos
+ * Utilizado por todos los módulos anteriores para debugging en consola F12
+ */
+
+// Configuración de colores por tipo de log
+DEBUG.colores = {
+  interfaz: '#2196F3',     // Azul
+  exito: '#4CAF50',        // Verde
+  advertencia: '#FF9800',  // Naranja
+  error: '#F44336',        // Rojo
+  servidor: '#9C27B0',     // Morado
+  datos: '#607D8B'         // Gris
+};
+
+// Iconos por tipo
+DEBUG.iconos = {
+  interfaz: '🟦',
+  exito: '🟢',
+  advertencia: '🟡',
+  error: '🔴',
+  servidor: '🟣',
+  datos: '⚫'
+};
+
+// Función principal de logging
+DEBUG.log = function(tipo, mensaje, datos = null) {
+  const timestamp = new Date().toLocaleTimeString('es-PE', {
+    hour12: false,
+    hour: '2-digit',
+    minute: '2-digit',
+    second: '2-digit',
+    fractionalSecondDigits: 3
+  });
+  
+  const color = this.colores[tipo] || '#000000';
+  const icono = this.iconos[tipo] || '⚪';
+  const tipoUpper = tipo.toUpperCase().padEnd(11, ' ');
+  
+  // Log principal con estilo
+  console.log(
+    `%c[${timestamp}] ${icono} ${tipoUpper}%c ${mensaje}`,
+    `color: ${color}; font-weight: bold`,
+    'color: inherit'
+  );
+  
+  // Si hay datos adicionales, mostrarlos
+  if (datos !== null && typeof datos === 'object') {
+    console.log('%c  └─ Datos:', 'color: #9E9E9E; font-style: italic', datos);
+  } else if (datos !== null) {
+    console.log('%c  └─ Valor:', 'color: #9E9E9E; font-style: italic', datos);
+  }
+};
+
+// Separador visual para secciones
+DEBUG.separador = function(titulo) {
+  const linea = '═'.repeat(55);
+  console.log(`%c${linea}`, 'color: #9E9E9E');
+  console.log(`%c${titulo}`, 'color: #2196F3; font-weight: bold; font-size: 14px');
+  console.log(`%c${linea}`, 'color: #9E9E9E');
+};
+
+// Medición de tiempos entre dos timestamps
+DEBUG.tiempo = function(etapa, inicio, fin) {
+  const duracion = ((fin - inicio) / 1000).toFixed(3);
+  const barraLongitud = Math.min(Math.round(duracion * 10), 50);
+  const barra = '█'.repeat(barraLongitud);
+  
+  console.log(
+    `%c⏱️  ${etapa}:%c ${duracion}s %c${barra}`,
+    'color: #FF9800; font-weight: bold',
+    'color: #4CAF50; font-weight: bold',
+    'color: #4CAF50'
+  );
+};
+
+// Visualizador de objetos con formato expandible
+DEBUG.objeto = function(nombre, obj) {
+  console.log(`%c📦 ${nombre}:`, 'color: #9C27B0; font-weight: bold');
+  
+  if (typeof obj === 'object' && obj !== null) {
+    // Si es un array, usar tabla
+    if (Array.isArray(obj)) {
+      if (obj.length > 0 && typeof obj[0] === 'object') {
+        console.table(obj);
+      } else {
+        console.log(obj);
+      }
+    } else {
+      // Si es objeto, usar dir para expandible
+      console.dir(obj);
+    }
+  } else {
+    console.log(obj);
+  }
+};
+
+// Log inicial retrospectivo
+DEBUG.separador('SISTEMA INICIALIZADO');
+DEBUG.log('exito', 'Sistema de Ventas por Voz cargado correctamente', {
+  version: '01.05',
+  modulos: ['S01-Iniciador', 'S02-Variables', 'S03-SpeechRecognition', 'S04-Eventos', 'S05-Visualización', 'S06-Servidor', 'S07-Debug'],
+  navegador: navigator.userAgent.split(' ').pop(),
+  idioma: navigator.language
+});
+
+// Log retrospectivo de Speech Recognition (MOD-006-S03)
+if (typeof SpeechRecognition === 'undefined') {
+  DEBUG.log('error', 'Navegador no soporta Web Speech API');
+} else {
+  DEBUG.log('exito', 'Speech Recognition inicializado correctamente', {
+    lang: typeof recognition !== 'undefined' ? recognition.lang : 'es-PE',
+    soportado: true
+  });
+}
+
+DEBUG.log('interfaz', 'Esperando interacción del usuario...');
+// MOD-006-S07: FIN
+
+// MOD-006-S08: MOTOR DE SÍNTESIS DE VOZ (SABINA HUNTER II) [INICIO]
+function decir(texto, esReplay = false) {
+  if (!esReplay) ultimoMensajeVoz = texto;
+  if (!narracionActiva && !esReplay) return;
+  if (!window.speechSynthesis) return;
+
+  // Función interna para ejecutar el habla
+  const ejecutarHabla = () => {
+    window.speechSynthesis.cancel();
+    const mensaje = new SpeechSynthesisUtterance(texto);
+    mensaje.lang = 'es-PE';
+    mensaje.rate = 1.1;
+
+    const voces = window.speechSynthesis.getVoices();
+    
+    // Búsqueda exhaustiva de Sabina o similar
+    let voz = voces.find(v => v.name.toLowerCase().includes('sabina')) || 
+              voces.find(v => v.name.toLowerCase().includes('dalia')) ||
+              voces.find(v => v.name.toLowerCase().includes('google') && v.lang.includes('es'));
+
+    if (voz) mensaje.voice = voz;
+
+    window.speechSynthesis.speak(mensaje);
+    DEBUG.log('interfaz', '🔊 Voz final: ' + (mensaje.voice ? mensaje.voice.name : 'Genérica'));
+  };
+
+  // SI las voces aún no cargan (lista vacía), esperamos al evento del sistema
+  if (window.speechSynthesis.getVoices().length === 0) {
+    window.speechSynthesis.onvoiceschanged = ejecutarHabla;
+  } else {
+    ejecutarHabla();
+  }
+}
+// MOD-006-S08: FIN
+
+// MOD-006-S09: GESTOR DE EVENTOS DE AUDIO (NUEVO) [INICIO]
+/**
+ * Asigna listeners a los botones generados dinámicamente en S05
+ * Incluye trazabilidad total para auditoría de clics en consola
+ */
+function inicializarEventosAudio() {
+  const bMute = document.getElementById('btnMute');
+  const bStop = document.getElementById('btnStop');
+  const bPlay = document.getElementById('btnReplay');
+
+  // Evento MUTE
+  if (bMute) {
+    bMute.addEventListener('click', () => {
+      DEBUG.separador('USUARIO PRESIONA BOTÓN MUTE');
+      toggleMute();
+      DEBUG.log('interfaz', `Cambio de estado. Narración activa: ${narracionActiva}`);
+    });
+  }
+
+  // Evento DETENER
+  if (bStop) {
+    bStop.addEventListener('click', () => {
+      DEBUG.separador('USUARIO PRESIONA BOTÓN DETENER');
+      window.speechSynthesis.cancel();
+      DEBUG.log('interfaz', '⏹ Comando cancel() enviado al navegador');
+    });
+  }
+
+  // Evento REPETIR
+  if (bPlay) {
+    bPlay.addEventListener('click', () => {
+      DEBUG.separador('USUARIO PRESIONA BOTÓN REPETIR');
+      if (typeof ultimoMensajeVoz !== 'undefined' && ultimoMensajeVoz) {
+        DEBUG.log('interfaz', '🔊 Re-intentando lectura', { mensaje: ultimoMensajeVoz });
+        decir(ultimoMensajeVoz, true);
+      } else {
+        DEBUG.log('advertencia', 'No hay mensaje en memoria para repetir');
+      }
+    });
+  }
+  
+  // Log de confirmación de que el S09 terminó su trabajo
+  DEBUG.log('interfaz', '✅ Listeners vinculados y listos para recibir clics');
+}
+// MOD-006-S09: FIN
+
+// MOD-006-S10: FUNCIÓN TOGGLE MUTE [INICIO]
+/**
+ * Alterna el estado de narración de voz y persiste la preferencia
+ * Actualiza el icono del botón dinámicamente
+ */
+function toggleMute() {
+  // Cambiar estado
+  narracionActiva = !narracionActiva;
+  
+  // Guardar en localStorage (guardamos como string)
+  localStorage.setItem('muteVoz', narracionActiva.toString());
+  
+  // Actualizar icono del botón
+  const btnMute = document.getElementById('btnMute');
+  if (btnMute) {
+    btnMute.innerHTML = narracionActiva ? '🔊' : '🔈';
+  }
+  
+  // Si se muteó mientras habla, detener audio
+  if (!narracionActiva && window.speechSynthesis) {
+    window.speechSynthesis.cancel();
+  }
+  
+  DEBUG.log('interfaz', `Estado de audio cambiado: ${narracionActiva ? 'ACTIVADO' : 'MUTEADO'}`, {
+    guardadoEn: 'localStorage',
+    icono: narracionActiva ? '🔊' : '🔈'
+  });
+}
+// MOD-006-S10: FIN
+
+</script>
+<!-- MOD-006: FIN -->
+
+<!-- MOD-007: CÓDIGO DE CIERRE [INICIO] -->
 </div>
 </body>
 </html>
-<!-- MOD-006: FIN -->
+<!-- MOD-007: FIN -->
 
-<!-- MOD-007: NOTAS [INICIO] -->
+<!-- MOD-099: NOTAS [INICIO] -->
 <!--
 DESCRIPCIÓN:
 Interfaz de reconocimiento de voz para registro de ventas.
@@ -196,5 +663,10 @@ DEPENDENCIAS:
 ADVERTENCIAS:
 - Solo funciona en navegadores con soporte Web Speech API
 - Requiere permisos de micrófono
+
+HISTORIAL:
+v01.05: MOD-005 submodularizado (7 submódulos) + Sistema Debug Nivel 3
+v01.04: Visualización de ventas registradas (Producto - S/ Precio × Cant = S/ Total)
+v01.03: Corrección de delimitadores CSS/JS según estándar CodeWorkShop
 -->
-<!-- MOD-007: FIN -->
+<!-- MOD-099: FIN -->
